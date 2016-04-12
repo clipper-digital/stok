@@ -1,0 +1,19 @@
+{
+  "name": "stok",
+  "version": "0.0.0",
+  "description": "Boilerplate Node Application",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/clipper-digital/stok.git"
+  },
+  "author": "Clipper Digital",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/clipper-digital/stok/issues"
+  },
+  "homepage": "https://github.com/clipper-digital/stok#readme"
+}
