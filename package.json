@@ -15,5 +15,11 @@
   "bugs": {
     "url": "https://github.com/clipper-digital/stok/issues"
   },
-  "homepage": "https://github.com/clipper-digital/stok#readme"
+  "homepage": "https://github.com/clipper-digital/stok#readme",
+  "dependencies": {
+    "good": "^6.6.0",
+    "good-console": "^5.3.1",
+    "good-file": "^5.1.2",
+    "hapi": "^13.3.0"
+  }
 }
