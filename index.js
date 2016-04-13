@@ -2,6 +2,8 @@
 
 const Hapi = require('hapi');
 const dotenv = require('dotenv');
+const good = require('good');
+const goodConsole = require('good-console');
 
 class Stok {
   static loadConfiguration(options) {
@@ -57,14 +59,13 @@ function proxyConnection(connection) {
       }
 
       routes.forEach(function (route) {
-        console.log(route);
         let handler = route.handler;
-        route.handler = (function (request, reply) {
+        route.handler = function (request, reply) {
           handler(request, reply)
             .catch(error => {
               reply(error);
             });
-        });
+        };
       });
 
       original.call(connection, routes);
@@ -73,10 +74,10 @@ function proxyConnection(connection) {
 }
 
 const logToConsoleSettings = {
-  register: require('good'),
+  register: good,
   config: {
     reporters: [{
-      reporter: require('good-console'),
+      reporter: goodConsole,
       events: {
         response: '*',
         log: '*'
