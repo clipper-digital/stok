@@ -50,9 +50,9 @@ const Stok = {
   }
 };
 
+// Monkey patch the route method and add error handling to
+// all of our routes
 function proxyConnection(connection) {
-  // Monkey patch the route method and add error handling to
-  // all of our routes
   connection.route = (function (original) {
     return function (routes) {
       if (!Array.isArray(routes)) {
