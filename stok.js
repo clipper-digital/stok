@@ -3,16 +3,13 @@
 const Hapi = require('hapi');
 const dotenv = require('dotenv');
 
-const Stok = {
-
-  // Load configuration from environment variables. Use the provided
-  // default if no environment variable is found
-  loadConfiguration: function (options) {
+class Stok {
+  static loadConfiguration(options) {
     let configuration = {};
 
     dotenv.config({ silent: true });
 
-    Object.keys(options).forEach(function (options) {
+    Object.keys(options).forEach(function (option) {
       let value = options[option];
       let defaultValue = null;
 
@@ -33,9 +30,9 @@ const Stok = {
     });
 
     return configuration;
-  },
+  }
 
-  createServer: function () {
+  static createServer() {
     const server = new Hapi.Server();
     server.connection = (function (original) {
       return function (options) {
@@ -48,9 +45,9 @@ const Stok = {
     return server.register(logToConsoleSettings)
       .then(() => server);
   }
-};
+}
 
-// Monkey patch the route method and add error handling to
+// Override the route method and add error handling to
 // all of our routes
 function proxyConnection(connection) {
   connection.route = (function (original) {
@@ -60,6 +57,7 @@ function proxyConnection(connection) {
       }
 
       routes.forEach(function (route) {
+        console.log(route);
         let handler = route.handler;
         route.handler = (function (request, reply) {
           handler(request, reply)
