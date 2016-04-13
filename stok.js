@@ -1,70 +1,82 @@
 'use strict';
 
 const Hapi = require('hapi');
+const dotenv = require('dotenv');
 
-class Stok {
-  constructor(options) {
-    this.options = options;
-  }
+const Stok = {
 
-  createServer(routes) {
-    return new Promise((resolve, reject) => {
-      const server = new Hapi.Server();
-      server.connection({ port: this.options.web.port });
+  // Load configuration from environment variables. Use the provided
+  // default if no environment variable is found
+  loadConfiguration: function (options) {
+    let configuration = {};
 
-      // Monkey patch the route method and add error handling to
-      // all of our routes
-      server.route = ((original) => {
-        routes => {
-          routes.forEach(route => {
-            let handler = route.handler;
-            route.handler = ((request, reply) => {
-              handler(request, reply)
-                .catch(error => {
-                  reply(error);
-                });
-            });
-          });
-          original.call(server, routes);
-        };
-      })(server.route(routes));
+    dotenv.config({ silent: true });
 
-      server.register(getLoggingSettings(this.options.web.logging.filePath), error => {
-        if (error) {
-          reject(error);
+    Object.keys(options).forEach(function (options) {
+      let value = options[option];
+      let defaultValue = null;
+
+      if (typeof value === 'object') {
+        if (!value.hasOwnProperty('env') || !value.hasOwnProperty('default')) {
+          value = loadConfiguration(value);
+        } else {
+          defaultValue = value.default;
+          value = process.env[value.env];
         }
+      } else {
+        if (typeof value === 'string') {
+          value = process.env[value];
+        }
+      }
+
+      configuration[option] = value || defaultValue;
+    });
+
+    return configuration;
+  },
+
+  createServer: function () {
+    const server = new Hapi.Server();
+    server.connection = (function (original) {
+      return function (options) {
+        const connection = original.call(server, options);
+        proxyConnection(connection);
+      };
+    })(server.connection);
+
+    proxyConnection(server);
+    return server.register(logToConsoleSettings)
+      .then(() => server);
+  }
+};
+
+function proxyConnection(connection) {
+  // Monkey patch the route method and add error handling to
+  // all of our routes
+  connection.route = (function (original) {
+    return function (routes) {
+      if (!Array.isArray(routes)) {
+        routes = [routes];
+      }
+
+      routes.forEach(function (route) {
+        let handler = route.handler;
+        route.handler = (function (request, reply) {
+          handler(request, reply)
+            .catch(error => {
+              reply(error);
+            });
+        });
       });
 
-      resolve(server);
-    });
-  }
-}
-
-// If a logging filepath is provided via the options object, log to that file
-// If no filepath is provided, logs go to stdout
-function getLoggingSettings(path) {
-  if (!path) {
-    return logToConsoleSettings;
-  }
-
-  return {
-    register: require('good'),
-    options: {
-      reporters: [{
-        reporter: require('good-file'),
-        events: {
-          response: '*',
-          log: '*'
-        },
-        config: path
-      }]
-    }
-  };
+      original.call(connection, routes);
+    };
+  })(connection.route);
 }
 
 const logToConsoleSettings = {
   register: require('good'),
-  options: {
+  config: {
     reporters: [{
       reporter: require('good-console'),
       events: {

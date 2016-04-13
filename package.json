@@ -4,7 +4,8 @@
   "description": "Boilerplate Node Application",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "jscs *.js"
   },
   "repository": {
     "type": "git",
@@ -17,9 +18,14 @@
   },
   "homepage": "https://github.com/clipper-digital/stok#readme",
   "dependencies": {
+    "boom": "^3.1.2",
+    "dotenv": "^2.0.0",
     "good": "^6.6.0",
     "good-console": "^5.3.1",
     "good-file": "^5.1.2",
     "hapi": "^13.3.0"
+  },
+  "devDependencies": {
+    "jscs": "^2.11.0"
   }
 }
