@@ -6,6 +6,37 @@ const good = require('good');
 const goodConsole = require('good-console');
 
 class Stok {
+  constructor() {
+    this.registeredModules = [];
+  }
+
+  // Create a Hapi server with some custom overrides
+  createServer() {
+    this.server = new Hapi.Server();
+
+    // We need lexical 'this' here to pass around the class
+    // level 'server' variable, so we use arrow functions
+    this.server.connection = ((original) => {
+      return (options) => {
+        let connection = original.call(this.server, options);
+        proxyConnection(connection);
+      };
+    })(this.server.connection);
+
+    proxyConnection(this.server);
+    return this.server.register(logToConsoleSettings)
+      .then(() => this.server);
+  }
+
+  registerModule(module) {
+    this.registeredModules.push(module);
+  }
+
+  shutdown() {
+    return shutdownModules(this.registeredModules)
+      .then(() => this.server.stop());
+  }
+
   static loadConfiguration(options) {
     let configuration = {};
 
@@ -33,20 +64,16 @@ class Stok {
 
     return configuration;
   }
+}
 
-  static createServer() {
-    const server = new Hapi.Server();
-    server.connection = (function (original) {
-      return function (options) {
-        const connection = original.call(server, options);
-        proxyConnection(connection);
-      };
-    })(server.connection);
+function shutdownModules(modules) {
+  let module = modules.pop();
 
-    proxyConnection(server);
-    return server.register(logToConsoleSettings)
-      .then(() => server);
+  if (!module) {
+    return Promise.resolve();
   }
+
+  return module.shutdown().then(() => shutdownModules(modules));
 }
 
 // Override the route method and add error handling to

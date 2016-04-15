@@ -1,5 +1,6 @@
 {
   "preset": "airbnb",
   "esnext": true,
-  "requireTrailingComma": false
+  "requireTrailingComma": false,
+  "requireShorthandArrowFunctions": false
 }
