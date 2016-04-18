@@ -2,6 +2,7 @@
 
 const good = require('good');
 const goodConsole = require('good-console');
+const Hoek = require('hoek');
 const HapiProxy = require('./lib/hapi-proxy');
 const loadConfiguration = require('./lib/load-configuration');
 
@@ -19,8 +20,13 @@ const logToConsoleSettings = {
 };
 
 class Stok {
-  constructor() {
+  constructor(options) {
     this.registeredModules = [];
+    this.options = Hoek.applyToDefaults({
+      shutdownSignals: ['SIGINT', 'SIGTERM']
+    }, options || {});
+
+    this.registerShutdownSignals();
   }
 
   // Create a Hapi server with some custom overrides
@@ -50,6 +56,19 @@ class Stok {
 
     this.server.log(['module'], `Module registered: ${module.name}`);
     this.registeredModules.push(module);
+  }
+
+  registerShutdownSignals() {
+    if (!this.options.shutdownSignals) {
+      return;
+    }
+
+    this.options.shutdownSignals.forEach((signal) => {
+      process.on(signal, () => {
+        this.server.log(['shutdown'], `Received signal: ${signal}`);
+        this.shutdown();
+      });
+    });
   }
 
   shutdown() {
