@@ -4,8 +4,9 @@
   "description": "Boilerplate Node Application",
   "main": "index.js",
   "scripts": {
-    "lint": "jscs index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "jscs index.js && jscs lib/** && jscs tests/**",
+    "nodeunit": "nodeunit tests/**",
+    "test": "npm run lint && npm run nodeunit"
   },
   "repository": {
     "type": "git",
@@ -23,6 +24,8 @@
     "hoek": "3.0.4"
   },
   "devDependencies": {
-    "jscs": "2.11.0"
+    "jscs": "2.11.0",
+    "nodeunit": "0.9.1",
+    "sinon": "^1.17.3"
   }
 }
