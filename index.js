@@ -6,17 +6,24 @@ const loadConfiguration = require('./lib/load-configuration');
 
 class Stok {
   constructor(options) {
-    this._registeredModules = [];
+    if (!options.hasOwnProperty('appVersion')) {
+      throw new Error('Missing required field: appVersion');
+    }
+
     this._options = Hoek.applyToDefaults({
       shutdownSignals: ['SIGINT', 'SIGTERM']
-    }, options || {});
+    }, options);
+
+    this._registeredModules = [];
 
     this._registerShutdownSignals();
   }
 
   // Create a Hapi server with some custom overrides
   createServer() {
-    this.serverProxy = new HapiProxy();
+    this.serverProxy = new HapiProxy({
+      appVersion: this._options.appVersion
+    });
     this.server = this.serverProxy.getServer();
 
     // TODO: set up logging
