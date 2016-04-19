@@ -2,7 +2,9 @@ const Stok = require('../index');
 
 exports.registerModule = {
   setUp(done) {
-    this.stok = new Stok();
+    this.stok = new Stok({
+      appVersion: '0.0.0'
+    });
     done();
   },
 
@@ -33,7 +35,9 @@ exports.registerModule = {
 
 exports.shutdown = {
   setUp(done) {
-    this.stok = new Stok();
+    this.stok = new Stok({
+      appVersion: '0.0.0'
+    });
     done();
   },
 
