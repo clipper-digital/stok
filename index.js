@@ -1,38 +1,25 @@
 'use strict';
 
-const good = require('good');
-const goodConsole = require('good-console');
 const Hoek = require('hoek');
 const HapiProxy = require('./lib/hapi-proxy');
 const loadConfiguration = require('./lib/load-configuration');
 
-const logToConsoleSettings = {
-  register: good,
-  config: {
-    reporters: [{
-      reporter: goodConsole,
-      events: {
-        response: '*',
-        log: '*'
-      }
-    }]
-  }
-};
-
 class Stok {
   constructor(options) {
-    this.registeredModules = [];
-    this.options = Hoek.applyToDefaults({
+    this._registeredModules = [];
+    this._options = Hoek.applyToDefaults({
       shutdownSignals: ['SIGINT', 'SIGTERM']
     }, options || {});
 
-    this.registerShutdownSignals();
+    this._registerShutdownSignals();
   }
 
   // Create a Hapi server with some custom overrides
   createServer() {
     this.serverProxy = new HapiProxy();
     this.server = this.serverProxy.getServer();
+
+    // TODO: set up logging
 
     this.registerModule({
       name: 'Hapi Server',
@@ -45,8 +32,11 @@ class Stok {
       }
     });
 
-    return this.server.register(logToConsoleSettings)
-      .then(() => this.server);
+    return Promise.resolve(this.server);
+  }
+
+  log() {
+    // TODO
   }
 
   registerModule(module) {
@@ -54,45 +44,45 @@ class Stok {
       throw new Error('Missing required field: name');
     }
 
-    this.server.log(['module'], `Module registered: ${module.name}`);
-    this.registeredModules.push(module);
-  }
-
-  registerShutdownSignals() {
-    if (!this.options.shutdownSignals) {
-      return;
-    }
-
-    this.options.shutdownSignals.forEach((signal) => {
-      process.on(signal, () => {
-        this.server.log(['shutdown'], `Received signal: ${signal}`);
-        this.shutdown();
-      });
-    });
+    this.log(['module'], `Module registered: ${module.name}`);
+    this._registeredModules.push(module);
   }
 
   shutdown() {
-    return this._shutdownModules(this.registeredModules);
+    return this._shutdownModules(this._registeredModules);
+  }
+
+  _registerShutdownSignals() {
+    if (!this._options.shutdownSignals) {
+      return;
+    }
+
+    this._options.shutdownSignals.forEach((signal) => {
+      process.on(signal, () => {
+        this.log(['shutdown'], `Received signal: ${signal}`);
+        this.shutdown();
+      });
+    });
   }
 
   _shutdownModules(modules) {
     const module = modules.pop();
 
     if (!module) {
-      this.server.log(['shutdown'], 'Shutdown complete');
+      this.log(['shutdown'], 'Shutdown complete');
       return Promise.resolve();
     }
 
-    this.server.log(['shutdown', 'module'], `Module shutdown starting: ${module.name}`);
+    this.log(['shutdown', 'module'], `Module shutdown starting: ${module.name}`);
 
     return module.shutdown()
       .then(() => {
-        this.server.log(['shutdown', 'module'], `Module shutdown complete: ${module.name}`);
+        this.log(['shutdown', 'module'], `Module shutdown complete: ${module.name}`);
         return this._shutdownModules(modules);
       })
       .catch((error) => {
-        this.server.log(['shutdown', 'module', 'error'], `Module shutdown error: ${module.name}`);
-        this.server.log(['shutdown', 'module', 'error'], error.stack);
+        this.log(['shutdown', 'module', 'error'], `Module shutdown error: ${module.name}`);
+        this.log(['shutdown', 'module', 'error'], error.stack);
 
         throw error;
       });
