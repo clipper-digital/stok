@@ -19,8 +19,6 @@
   "homepage": "https://github.com/clipper-digital/stok#readme",
   "dependencies": {
     "dotenv": "2.0.0",
-    "good": "6.6.0",
-    "good-console": "5.3.1",
     "hapi": "13.3.0",
     "hoek": "3.0.4"
   },
