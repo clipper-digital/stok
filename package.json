@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "lint": "jscs index.js && jscs lib/** && jscs tests/**",
-    "nodeunit": "nodeunit tests/**",
+    "nodeunit": "TEST_MODE=1 nodeunit tests/**",
     "test": "npm run lint && npm run nodeunit"
   },
   "repository": {
@@ -19,8 +19,10 @@
   },
   "homepage": "https://github.com/clipper-digital/stok#readme",
   "dependencies": {
+    "bole": "2.0.0",
     "dotenv": "2.0.0",
     "hapi": "13.3.0",
+    "hapi-common-log": "1.1.0",
     "hoek": "3.0.4"
   },
   "devDependencies": {
