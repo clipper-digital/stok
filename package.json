@@ -1,7 +1,7 @@
 {
   "name": "stok",
   "version": "0.0.0",
-  "description": "Boilerplate Node Application",
+  "description": "Base layer for building twelve-factor apps using Hapi",
   "main": "index.js",
   "scripts": {
     "lint": "jscs index.js && jscs lib/** && jscs tests/**",
@@ -12,7 +12,7 @@
     "type": "git",
     "url": "git+https://github.com/clipper-digital/stok.git"
   },
-  "author": "Clipper Digital",
+  "author": "Scott González <scott.gonzalez@gmail.com>",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/clipper-digital/stok/issues"
