@@ -69,7 +69,7 @@ exports.shutdown = {
 
     this.stok.shutdown()
       .catch((error) => {
-        test.deepEqual(invoked, ['Third', 'Second'], 'Shutdown order');
+        test.deepEqual(invoked, ['First', 'Second'], 'Shutdown order');
         test.strictEqual(error, providedError, 'Error propagates');
         test.done();
       });
@@ -102,7 +102,7 @@ exports.shutdown = {
 
     this.stok.shutdown()
       .then(() => {
-        test.deepEqual(invoked, ['Third', 'Second', 'First'], 'Shutdown order');
+        test.deepEqual(invoked, ['First', 'Second', 'Third'], 'Shutdown order');
         test.done();
       });
   }

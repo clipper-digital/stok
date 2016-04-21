@@ -57,7 +57,7 @@ class Stok {
   }
 
   shutdown() {
-    return this._shutdownModules(this._registeredModules);
+    return this._shutdownModules(this._registeredModules.slice().reverse());
   }
 
   _registerShutdownSignals() {
