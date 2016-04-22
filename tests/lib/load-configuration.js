@@ -1,40 +1,40 @@
-const dotenv = require('dotenv');
-const sinon = require('sinon');
-const loadConfiguration = require('../../lib/load-configuration');
+const dotenv = require('dotenv')
+const sinon = require('sinon')
+const loadConfiguration = require('../../lib/load-configuration')
 
 exports.loadConfiguration = {
   setUp: function (done) {
-    this._env = process.env;
-    process.env = {};
-    done();
+    this._env = process.env
+    process.env = {}
+    done()
   },
 
   tearDown: function (done) {
-    process.env = this._env;
-    this.configStub.restore();
-    done();
+    process.env = this._env
+    this.configStub.restore()
+    done()
   },
 
-  simple(test) {
+  simple (test) {
     this.configStub = sinon.stub(dotenv, 'config', () => {
-      process.env.FOO = 'my foo';
-    });
+      process.env.FOO = 'my foo'
+    })
     const config = loadConfiguration({
       foo: 'FOO',
       bar: 'BAR'
-    });
+    })
     test.deepEqual(config, {
       foo: 'my foo',
       bar: null
-    });
-    test.done();
+    })
+    test.done()
   },
 
-  complex(test) {
+  complex (test) {
     this.configStub = sinon.stub(dotenv, 'config', () => {
-      process.env.WEB_PORT = 1234;
-      process.env.DB_HOST = 'db-host';
-    });
+      process.env.WEB_PORT = 1234
+      process.env.DB_HOST = 'db-host'
+    })
     const config = loadConfiguration({
       web: {
         port: {
@@ -49,7 +49,7 @@ exports.loadConfiguration = {
           default: 8000
         }
       }
-    });
+    })
     test.deepEqual(config, {
       web: {
         port: 1234
@@ -58,7 +58,7 @@ exports.loadConfiguration = {
         host: 'db-host',
         port: 8000
       }
-    });
-    test.done();
+    })
+    test.done()
   }
-};
+}
