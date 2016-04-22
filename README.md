@@ -9,27 +9,27 @@ Stok provides a base layer for building [twelve-factor apps](http://12factor.net
 ## Example
 
 ```js
-const Stok = require('stok');
+const Stok = require('stok')
 
 // A fake service to demonstrate route error handling
-const someService = function() {
+const someService = function () {
   if (Math.random() > 0.2) {
-    return Promise.resolve('Stok is great!');
+    return Promise.resolve('Stok is great!')
   }
 
-  return Promise.reject(new Error('Stok handles errors!'));
-};
+  return Promise.reject(new Error('Stok handles errors!'))
+}
 
 const config = Stok.loadConfiguration({
   port: {
     env: 'PORT',
     default: 3000
   }
-});
+})
 
 const stok = new Stok({
   appVersion: '0.0.1'
-});
+})
 
 stok.createServer({
   port: config.port
@@ -40,21 +40,20 @@ stok.createServer({
       path: '/',
       handler: (request, reply) => {
         return someService()
-          .then(message => {
-            reply({ message: message });
-          });
+          .then((message) => {
+            reply({ message: message })
+          })
       }
-    });
+    })
 
-    return stok.server.start();
+    return stok.server.start()
   })
   .then(() => {
-    console.log(`Server running at ${stok.server.info.uri}`);
+    console.log(`Server running at ${stok.server.info.uri}`)
   })
-  .catch(error => {
-    console.error(error.stack);
-  });
-
+  .catch((error) => {
+    console.error(error.stack)
+  })
 ```
 
 
@@ -125,7 +124,7 @@ const config = Stok.loadConfiguration({
     user: 'DB_USER',
     password: 'DB_PASSWORD'
   }
-});
+})
 ```
 
 

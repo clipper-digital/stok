@@ -4,7 +4,7 @@
   "description": "Base layer for building twelve-factor apps using Hapi",
   "main": "index.js",
   "scripts": {
-    "lint": "jscs index.js && jscs lib/** && jscs tests/**",
+    "lint": "standard",
     "nodeunit": "TEST_MODE=1 nodeunit tests/**",
     "test": "npm run lint && npm run nodeunit"
   },
@@ -26,8 +26,8 @@
     "hoek": "3.0.4"
   },
   "devDependencies": {
-    "jscs": "2.11.0",
     "nodeunit": "0.9.1",
-    "sinon": "^1.17.3"
+    "sinon": "1.17.3",
+    "standard": "6.0.8"
   }
 }
