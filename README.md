@@ -159,7 +159,8 @@ Creates a new `Stok` instance.
 
 Creates a Hapi server and a connection.
 
-* `options` (Object): Configuration options for [Hapi's `server.connection()`](http://hapijs.com/api#serverconnectionoptions).
+* `options` (Object): Configuration options for [Hapi's `server.connection()`](http://hapijs.com/api#serverconnectionoptions), plus the following options:
+  * `ipHeader` (String; optional): The name of the header that contains the client's IP, for use behind a proxy.
 
 _NOTE: `Stok` instances can only have one connection per server._
 _NOTE: [Routes have customized behavior](#routing)._

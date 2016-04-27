@@ -22,8 +22,8 @@
     "bole": "2.0.0",
     "dotenv": "2.0.0",
     "hapi": "13.3.0",
-    "hapi-common-log": "1.1.0",
-    "hoek": "3.0.4"
+    "hoek": "3.0.4",
+    "moment-tokens": "1.0.0"
   },
   "devDependencies": {
     "nodeunit": "0.9.1",
