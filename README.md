@@ -70,7 +70,7 @@ stok.createServer({
 
 ### Routing
 
-[Routes](http://hapijs.com/api#route-configuration) work just like they do in Hapi, with one change: The `handler` can optionally return a promise to allow simplified error handling. If the promise is rejected, a response will be generated from the error as if you had called `reply(error)`.
+[Routes](http://hapijs.com/api#route-configuration) work just like they do in Hapi, with one change: The `handler` can optionally return a promise to allow simplified error handling. If the promise is rejected, a response will be generated from the error as if you had called `reply(error)`. This behavior can be controlled via the [`onResponseError` option][new Stok()] when creating a new `Stok` instance.
 
 A health check route (`GET /_health`) is automatically added to the server for getting basic information about the server, and to verify that the server is still working. The response is JSON and includes the following properties:
 
@@ -151,6 +151,7 @@ Creates a new `Stok` instance.
 
 * `options` (Object): Configuration options for the `Stok` instance.
   * `appVersion` (String): The version of the application being instantiated.
+  * `onResponseError` (Function; `function(request, reply, error)`): A function to invoke when a route returns a rejected promise. Defaults to a function which passes the `error` to `reply`.
   * `shutdownSignals` (Array; optional): Which signals to listen to for graceful shutdown. Default: `['SIGINT', 'SIGTERM']`.
 
 
