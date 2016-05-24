@@ -33,6 +33,22 @@ class Stok {
     })
     this.server = this.serverProxy.getServer()
 
+    // Pipe relevant logs to the logger
+    this._serverLogger = Stok.createLogger('server')
+    this.server.on('log', (event, tags) => {
+      if (tags.error) {
+        this._serverLogger.error(event)
+      } else {
+        this._serverLogger.info(event)
+      }
+    })
+    this.server.on('request', (request, event) => {
+      request.logger.info(event)
+    })
+    this.server.on('request-error', (request, error) => {
+      request.logger.error({ stack: error.stack }, error.message)
+    })
+
     this.registerModule({
       name: 'Hapi Server',
       shutdown: () => {
