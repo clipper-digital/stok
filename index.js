@@ -34,12 +34,12 @@ class Stok {
     this.server = this.serverProxy.getServer()
 
     // Pipe relevant logs to the logger
-    this._serverLogger = Stok.createLogger('server')
+    this.server.decorate('server', 'logger', Stok.createLogger('server'))
     this.server.on('log', (event, tags) => {
       if (tags.error) {
-        this._serverLogger.error(event)
+        this.server.logger.error(event)
       } else {
-        this._serverLogger.info(event)
+        this.server.logger.info(event)
       }
     })
     this.server.on('request', (request, event) => {
