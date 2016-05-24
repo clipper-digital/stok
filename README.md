@@ -49,7 +49,7 @@ stok.createServer({
     return stok.server.start()
   })
   .then(() => {
-    console.log(`Server running at ${stok.server.info.uri}`)
+    stok.server.logger.info(`Server running at ${stok.server.info.uri}`)
   })
   .catch((error) => {
     console.error(error.stack)
@@ -79,6 +79,12 @@ A health check route (`GET /_health`) is automatically added to the server for g
 * `uptime`: How long the process has been running.
 * `appVersion`: The version of the application that is currently running.
 * `stokVersion`: The version of `Stok` that is currently running.
+
+
+
+### Logging
+
+The Hapi server and all requests have a `logger` property which is a `Logger` instance created via [`Stock.createLogger()`][Stok.createLogger()]. Any logs created via Hapi's `server.log()` or `request.log()` methods will get piped to the appropriate `Logger` instance. By default these logs will be set to the `info` level, but if an `error` tag exists in the log call, then the `error` level will be used.
 
 
 
@@ -193,6 +199,7 @@ Stok will automatically perform a graceful shutdown when it receives `SIGTERM` o
 Copyright Stok contributors.
 Released under the terms of the ISC license.
 
+[Stok.createLogger()]: #stokcreateloggername-returns-logger
 [Stok.loadConfiguration()]: #stokloadconfigurationconfig-returns-object
 [Stok.logLevel()]: #stokloglevellevel
 [new Stok()]: #new-stokoptions
