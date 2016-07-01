@@ -13,10 +13,7 @@ class Stok {
     }
 
     this._options = Hoek.applyToDefaults({
-      shutdownSignals: ['SIGINT', 'SIGTERM'],
-      onResponseError: (request, reply, error) => {
-        reply(error)
-      }
+      shutdownSignals: ['SIGINT', 'SIGTERM']
     }, options)
 
     this._logger = Stok.createLogger('stok')
@@ -27,9 +24,18 @@ class Stok {
 
   // Create a Hapi server with some custom overrides
   createServer (connectionOptions) {
+    connectionOptions = Hoek.applyToDefaults({
+      onResponseError: (request, reply, error) => {
+        reply(error)
+      }
+    }, connectionOptions)
+
+    const onResponseError = connectionOptions.onResponseError
+    delete connectionOptions.onResponseError
+
     this.serverProxy = new HapiProxy({
       appVersion: this._options.appVersion,
-      onResponseError: this._options.onResponseError
+      onResponseError: onResponseError
     })
     this.server = this.serverProxy.getServer()
 

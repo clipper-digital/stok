@@ -70,7 +70,7 @@ stok.createServer({
 
 ### Routing
 
-[Routes](http://hapijs.com/api#route-configuration) work just like they do in Hapi, with one change: The `handler` can optionally return a promise to allow simplified error handling. If the promise is rejected, a response will be generated from the error as if you had called `reply(error)`. This behavior can be controlled via the [`onResponseError` option][new Stok()] when creating a new `Stok` instance.
+[Routes](http://hapijs.com/api#route-configuration) work just like they do in Hapi, with one change: The `handler` can optionally return a promise to allow simplified error handling. If the promise is rejected, a response will be generated from the error as if you had called `reply(error)`. This behavior can be controlled via the [`onResponseError` option][Stok#createServer()] when creating a server.
 
 A health check route (`GET /_health`) is automatically added to the server for getting basic information about the server, and to verify that the server is still working. The response is JSON and includes the following properties:
 
@@ -157,7 +157,6 @@ Creates a new `Stok` instance.
 
 * `options` (Object): Configuration options for the `Stok` instance.
   * `appVersion` (String): The version of the application being instantiated.
-  * `onResponseError` (Function; `function(request, reply, error)`): A function to invoke when a route returns a rejected promise. Defaults to a function which passes the `error` to `reply`.
   * `shutdownSignals` (Array; optional): Which signals to listen to for graceful shutdown. Default: `['SIGINT', 'SIGTERM']`.
 
 
@@ -168,6 +167,7 @@ Creates a Hapi server and a connection.
 
 * `options` (Object): Configuration options for [Hapi's `server.connection()`](http://hapijs.com/api#serverconnectionoptions), plus the following options:
   * `ipHeader` (String; optional): The name of the header that contains the client's IP, for use behind a proxy.
+  * `onResponseError` (Function; `function(request, reply, error)`): A function to invoke when a route returns a rejected promise. Defaults to a function which passes the `error` to `reply`.
 
 _NOTE: `Stok` instances can only have one connection per server._
 _NOTE: [Routes have customized behavior](#routing)._
@@ -203,4 +203,5 @@ Released under the terms of the ISC license.
 [Stok.loadConfiguration()]: #stokloadconfigurationconfig-returns-object
 [Stok.logLevel()]: #stokloglevellevel
 [new Stok()]: #new-stokoptions
+[Stok#createServer()]: #stokcreateserveroptions-returns-promise
 [Stok#shutdown()]: #stokshutdown-returns-promise
