@@ -86,6 +86,17 @@ A health check route (`GET /_health`) is automatically added to the server for g
 
 The Hapi server and all requests have a `logger` property which is a `Logger` instance created via [`Stock.createLogger()`][Stok.createLogger()]. Any logs created via Hapi's `server.log()` or `request.log()` methods will get piped to the appropriate `Logger` instance. By default these logs will be set to the `info` level, but if an `error` tag exists in the log call, then the `error` level will be used.
 
+Each request has the following data logged with a `message` of "HTTP request":
+
+* `clientIp`: The IP of the client that initiated the request. Respects the [`ipHeader` option][Stok#createServer()].
+* `duration`: The total duration for the request, including sending the response, in milliseconds, with nanosecond precision.
+* `latency`: The duration between the request being received and the response being sent, in milliseconds, with nanosecond precision.
+* `method`: The HTTP method for the request.
+* `path`: The path for the request.
+* `protocol`: The protocol used for the request.
+* `statusCode`: The HTTP status code of the response.
+* `userAgent`: The user agent for the client that initiated the request.
+
 
 
 ### Graceful Shutdown
