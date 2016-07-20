@@ -1,6 +1,6 @@
 {
   "name": "stok",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "Base layer for building twelve-factor apps using Hapi",
   "main": "index.js",
   "scripts": {
