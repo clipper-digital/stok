@@ -2,7 +2,7 @@
 
 const Hoek = require('hoek')
 const HapiProxy = require('./lib/hapi-proxy')
-const loadConfiguration = require('./lib/load-configuration')
+const loadConfiguration = require('stok-config')
 const logger = require('./lib/logger')
 const version = require('./package').version
 
