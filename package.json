@@ -19,15 +19,14 @@
   },
   "homepage": "https://github.com/clipper-digital/stok#readme",
   "dependencies": {
-    "bole": "2.0.0",
-    "dotenv": "2.0.0",
-    "hapi": "13.3.0",
-    "hoek": "3.0.4",
+    "bole": "3.0.2",
+    "hapi": "16.6.2",
+    "hoek": "5.0.1",
     "stok-config": "1.0.0"
   },
   "devDependencies": {
-    "nodeunit": "0.9.1",
-    "sinon": "1.17.3",
-    "standard": "6.0.8"
+    "nodeunit": "0.11.2",
+    "sinon": "4.0.2",
+    "standard": "10.0.3"
   }
 }
