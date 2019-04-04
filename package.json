@@ -22,7 +22,7 @@
     "bole": "3.0.2",
     "hapi": "16.6.2",
     "hoek": "5.0.1",
-    "stok-config": "1.0.0"
+    "stok-config": "1.0.1"
   },
   "devDependencies": {
     "nodeunit": "0.11.2",
